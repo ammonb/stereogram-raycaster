@@ -114,7 +114,7 @@ function updateScreen() {
         makeEdits();
     } else {
         edit_x = edit_y = -1;
-        handleControlls();
+        handleControls();
     }
 
     checkRenderMode();
@@ -160,7 +160,7 @@ function checkRenderMode() {
 }
 
 // check for key presses and update the player velocity
-function handleControlls() {
+function handleControls() {
     if (game.isKeyPressed(ARROW_LEFT)) {
         cam_vel_a -= 1;
     }
