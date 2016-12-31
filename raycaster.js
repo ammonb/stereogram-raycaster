@@ -521,7 +521,7 @@ function convertToStereogram() {
             var i = (y * game.width + x) * 4;
 
             // z coordinate at point x
-            var z = 1.0 - (imageData.data[i] + imageData.data[i+1] + imageData.data[i+2]) / (255*3);
+            var z = (imageData.data[i] + imageData.data[i+1] + imageData.data[i+2]) / (255*3);
 
             // stereographic separation at point x
             var s = Math.floor(stereoSeperation(z));
