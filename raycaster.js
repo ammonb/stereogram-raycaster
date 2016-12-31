@@ -53,7 +53,7 @@ const block_types = {
 };
 
 // how high the camera is positioned above the block it's standing on
-const PLAYER_HEIGHT = 6.5;
+const PLAYER_HEIGHT = 3.5;
 
 const FIELD_OF_VIEW = 80;
 
@@ -342,7 +342,7 @@ function colorWithShade(color_components, shade) {
 
 const MIN_LIGHT = 0.0;
 const MAX_LIGHT = 1.0;
-const MIN_LIGHT_DISTANCE = 10.0;
+const MIN_LIGHT_DISTANCE = 20.0;
 
 function shadeForDistance(distance) {
     if (distance > MIN_LIGHT_DISTANCE) return MIN_LIGHT;
@@ -521,7 +521,7 @@ function convertToStereogram() {
             var i = (y * game.width + x) * 4;
 
             // z coordinate at point x
-            var z = (imageData.data[i] + imageData.data[i+1] + imageData.data[i+2]) / (255*3);
+            var z = 1.0 - (imageData.data[i] + imageData.data[i+1] + imageData.data[i+2]) / (255*3);
 
             // stereographic separation at point x
             var s = Math.floor(stereoSeperation(z));
