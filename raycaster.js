@@ -71,6 +71,9 @@ const DEPTH_OF_FIELD = 0.3;
 const EYE_SEPARATION = 200;
 
 
+for (var i = 255; i > 0; i--) {
+    console.log("" + i + " ," + stereoSeperation(i / 255.0));
+}
 
 // track camera location and state
 var cam_x = 5.0;
@@ -139,7 +142,7 @@ function updateScreen() {
     for (var column = 0; column < game.width; column++) {
         castRay(column);
     }
-    if (render_mode == 2) {
+    if (render_mode == 2 || render_mode == 3) {
         convertToStereogram();
     }
 }
@@ -155,6 +158,10 @@ function checkRenderMode() {
     }
     if (game.isKeyPressed('3')) {
         render_mode = 2;
+        game.setBackgroundColor('black');
+    }
+    if (game.isKeyPressed('4')) {
+        render_mode = 3;
         game.setBackgroundColor('black');
     }
 }
@@ -499,21 +506,14 @@ function updateScreenGameOver() {
     }
 }
 
-function probabilisticInt(c) {
-    var s = c - Math.floor(c);
-    if (Math.random() > s) {
-        return Math.floor(c);
-    }
-    return Math.ceil(c);
-}
 
 // convert a depth-map on the scree into a stereogram
 function convertToStereogram() {
-    var same = Array(game.width);
+    var constraints = Array(game.width);
     var imageData = game.ctx.getImageData(0, 0, game.width, game.height);
     for (var y = 0; y < game.height; y++) {
         for (var x = 0; x < game.width; x++) {
-            same[x] = x;
+            constraints[x] = x;
         }
 
         for (var x = 0; x < game.width; x++) {
@@ -524,27 +524,41 @@ function convertToStereogram() {
             var z = (imageData.data[i] + imageData.data[i+1] + imageData.data[i+2]) / (255*3);
 
             // stereographic separation at point x
-            var s = Math.floor(stereoSeperation(z));
+            var s = stereoSeperation(z);
 
             // add constraints
-            var p1 = x - Math.floor(s/2);
+            var p2 = x + Math.floor(s/2);
 
-            var p2 = p1 + s;
+            var p1 = p2 - s;
 
             if (p1 >= 0 && p2 < game.width) {
-                same[p2] = p1;
+                constraints[p2] = p1;
             }
         }
 
         for (var x = 0; x < game.width; x++) {
             // index in the image data
             var write_index = (y * game.width + x) * 4;
-            if (same[x] == x) {
+            if (constraints[x] == x) {
                 var c = Math.random() > 0.5 ? 255 : 0;
                 imageData.data[write_index] = imageData.data[write_index+1] = imageData.data[write_index+2] = c;
             } else {
-                var source_index = (y * game.width + same[x]) * 4;
-                imageData.data[write_index] = imageData.data[write_index+1] = imageData.data[write_index+2] = imageData.data[source_index];
+                if (render_mode == 2) {
+                    // deal with floating point constraint by taking nearest neighbor
+                    var source_index = (y * game.width + Math.floor(constraints[x])) * 4;
+                    imageData.data[write_index] = imageData.data[write_index+1] = imageData.data[write_index+2] = imageData.data[source_index];
+
+                } else {
+                    // deal with floating point constraint by blending
+
+                    var source_index1 = (y * game.width + Math.floor(constraints[x])) * 4;
+                    var source_index2 = (y * game.width + Math.ceil(constraints[x])) * 4;
+
+                    // our position between the two pixels
+                    var f = constraints[x] - Math.floor(constraints[x]);
+                    var c = imageData.data[source_index1] * (1.0 - f) + imageData.data[source_index2] * f;
+                    imageData.data[write_index] = imageData.data[write_index+1] = imageData.data[write_index+2] = c;
+                }
             }
         }
     }
@@ -555,3 +569,4 @@ function convertToStereogram() {
 function stereoSeperation(z) {
     return ((1 - DEPTH_OF_FIELD*z) / (2 - DEPTH_OF_FIELD*z)) * EYE_SEPARATION;
 }
+
