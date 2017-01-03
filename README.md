@@ -38,7 +38,7 @@ The rendering loop used to draw the above image looks like
     }
 
 
-This basic idea can be extended to support arbitrary wall heights, horizontal surfaces, and vertical motion by the camera (as it is in the game Doom, and my raycaster above). To understand how this works, look at snippet of the rendering loop above
+This basic idea can be extended to support arbitrary wall heights, horizontal surfaces, and vertical motion by the camera (as it is in the game Doom, and my raycaster above). To understand how this works, look at a snippet of the rendering loop above
 
     // draw wall slice
     var h = WALL_HEIGHT / distance;
@@ -61,7 +61,7 @@ Here we have two points intersecting the ray we've cast, essentially defined in 
 
 ![Complex raycaster](./images/complex.png "Complex raycaster")
 
-I've totally ignored the issue of how you actually calculate ray intersections. You can read more about that here [here] (http://lodev.org/cgtutor/raycasting.html).
+I've totally ignored the issue of how you actually calculate ray/world intersections. You can read more about that [here] (http://lodev.org/cgtutor/raycasting.html).
 
 
 ## Random dot stereograms
@@ -82,7 +82,7 @@ Solving the constraints is not hard. However, it will be a per-pixel operation (
 
     constraint_separation  = (EYE_SEPERATION * z) / (1 + z)
 
-where EYE_SEPERATION is the distance between our eyes (in pixels), and z is the depth of the scene at the point in question, measured in distance from the image plane, in multiples of the distance form the eyes to the image plane.
+where EYE_SEPERATION is the distance between our eyes (in pixels), and z is the depth of the scene at the point in question, measured in distance from the image plane, in multiples of the distance from our eyes to the image plane.
 
 Because all constraints are between pairs of pixels in the same row, we can consider the algorithm one row at a time. For each row of pixels in the image, then, we create an array to store constraints, where we map each index pixel to an earlier pixel
 
