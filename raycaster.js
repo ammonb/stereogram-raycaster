@@ -1,4 +1,3 @@
-// You can ignore this code for now.
 var game = new ALGame(1000, 600);
 game.addGameState(updateScreen);
 game.addGameState(updateScreenGameOver);
@@ -122,10 +121,8 @@ function updateScreen() {
 
     checkRenderMode();
 
-
     // make the player move and bounce!
     applyPlayerPhysics();
-
 
     // pre-calculate vectors that will be useful when rendering
     var radian_angle = degreesToRadians(cam_angle);

@@ -70,15 +70,15 @@ Stereograms are images (or pairs of images) that provide the illusion of a 3D sc
 
 Random dot stereograms are stereograms where the images are seemingly random patterns of dots. Each image by itself shows nothing. However, a pair of random-dot images viewed as a stereogram can still provoke depth perception. Differences in the positions of the almost-random dots create depth perception without any color information.
 
-Random dot stereograms do not require a pair of images. This is the idea of a single-image random dot stereogram. Such an image uses a repetitive pattern of dots, similar to a chain link fence. The viewer can then spread or cross their eyes when viewing the image, and trick their bring into thinking that both eyes are focusing on the same spot when they are in fact offset by the width of the repeating pattern. Modifications to successive columns of the pattern can then create different angles between apparent features, and provoke depth perception.
+Random dot stereograms do not require a pair of images. This is the idea of a single-image random dot stereogram. Such an image uses a repetitive pattern of dots, similar to a chain link fence. The viewer can then spread or cross their eyes when viewing the image, and trick their brain into thinking that both eyes are focusing on the same spot when they are in fact offset by the width of the repeating pattern. Modifications to successive columns of the pattern can then create different angles between apparent features, and provoke depth perception.
 
-To understand the algorithm, consider the following diagram (a simplified version of a diagram for the paper linked below).
+To understand the algorithm, consider the following diagram.
 
 ![Stereogram diagram](./images/stereogram.png "Stereogram diagram")
 
 This diagram shows a pair of eyes focusing on a 3D scene. Between the eyes and the scene, we again have an image plane (just as we did for the raycaster). However, this time, the goal is represent not color information, but stereoscopic depth information. How can we do this? Consider points A and B in the digram. These are points on the surface of the 3D geometry that we are rendering. When both eyes focus on point A, the line from each eye passes through a different point in the image plane. Specifically, the line from the left eye passes through the point a1, and the line from the right eye passes through a2. If our image represents this scene, then, p1 and p2 must have the same color. Now consider point B on the scene. Again, the lines from the eyes pass through two points (b1 and b2). So points b1 and b2 must be the same color. We can repeat this exercise for every point on the surface of the geometry we are rendering, and the result will be a list of constraints on the output image (pairs of pixels that must be equal). All it takes to render a stereogram is to produce an image that satisfies these constraints (the degenerate case of setting all pixels to the same color is not a very interesting, however).
 
-Solving the constraints is not hard. However, it will be a per-pixel operation (like ray tracing) not a per-column operation like raycasting. First, we need a way to calculate the distance between constrained image points for a given point in the scene (the values x and y from the digram). By similar triangles, we get
+Solving the constraints is not hard. However, it will be a per-pixel operation (like ray tracing) not a per-column operation like raycasting. First, we need a way to calculate the distance between pairs of linked pixels, as a function of the z value at a given point (the values x and y from the digram). By similar triangles, we get
 
     constraint_separation  = (EYE_SEPERATION * z) / (1 + z)
 
