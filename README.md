@@ -1,6 +1,8 @@
 # Random dot stereogram raycaster
 
-This is a real-time 3D engine (ray caster) that renders to single-image random-dot stereogram (the images made popular in the Magic Eye books). You can give it a try [here](https://ammonb.github.io/stereogram-raycaster/). I wrote this because I was curious if the brain would be able to follow a stereogram in motion. Click on the screen and press 3 after the program starts to render in stereogram. Let me know what you think!
+This is a real-time 3D engine (ray caster) that renders to single-image random-dot stereogram (the images made popular in the Magic Eye books). I wrote this because I was curious if the brain would be able to follow a stereogram in motion. Click on the screen and press 3 after the program starts to render in stereogram. Let me know what you think!
+
+# [Give it a try here] (https://ammonb.github.io/stereogram-raycaster/)
 
 ## Controls
 
