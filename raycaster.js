@@ -96,7 +96,7 @@ var edit_y = -1;
 
 
 // are re rendering colors, a depth map, or a stereograph
-var render_mode = 0;
+var render_mode = 2;
 
 
 game.setLineWidth(1);
