@@ -1,3 +1,9 @@
+var seed = 1;
+function random() {
+    var x = Math.sin(seed++) * 10000;
+    return x - Math.floor(x);
+}
+
 var game = new ALGame(1000, 600);
 game.addGameState(updateScreen);
 game.addGameState(updateScreenGameOver);
@@ -109,6 +115,7 @@ if (map_types.length != map_heights.length || map_types[0].length != map_heights
 
 // this function is called once per game frame,
 function updateScreen() {
+    seed = 1
     game.clearScreen();
 
     // either edit blocks, or move the player, based on what keys are pressed
@@ -537,7 +544,7 @@ function convertToStereogram() {
             // index in the image data
             var write_index = (y * game.width + x) * 4;
             if (constraints[x] == x) {
-                var c = Math.random() > 0.5 ? 255 : 0;
+                var c = random() > 0.5 ? 255 : 0;
                 imageData.data[write_index] = imageData.data[write_index+1] = imageData.data[write_index+2] = c;
             } else {
                 if (render_mode == 2) {
